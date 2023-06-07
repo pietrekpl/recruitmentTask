@@ -1,0 +1,8 @@
+
+
+github:
+  base:
+    url:
+
+    apikey:
+    media-type: application/json
