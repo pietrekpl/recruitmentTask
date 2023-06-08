@@ -20,7 +20,7 @@ import java.util.List;
 public class GitHubController {
     private final GithubService githubService;
 
-    @PostMapping("/repositories")
+    @PostMapping(value = "/repositories", headers = "Accept=application/json")
     public List<RepositoryDto> getAllRepositories(@RequestBody GithubRequest githubRequest) {
         String username = githubRequest.getUsername();
         return githubService.getAllRepositories(username);

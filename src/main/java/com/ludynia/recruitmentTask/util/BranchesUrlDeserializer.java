@@ -1,27 +1,23 @@
 package com.ludynia.recruitmentTask.util;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ludynia.recruitmentTask.model.Branch;
 import com.ludynia.recruitmentTask.model.Commit;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class BranchesUrlDeserializer extends JsonDeserializer<List<Branch>>  {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+public class BranchesUrlDeserializer extends JsonDeserializer<List<Branch>> {
+
 
     @Override
     public List<Branch> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
         JsonNode node = jsonParser.readValueAsTree();
 
         List<Branch> branches = new ArrayList<>();

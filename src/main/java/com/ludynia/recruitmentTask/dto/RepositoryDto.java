@@ -6,6 +6,7 @@ import com.ludynia.recruitmentTask.util.BranchesUrlDeserializer;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class RepositoryDto {
     @JsonProperty("name")

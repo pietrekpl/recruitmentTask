@@ -3,6 +3,7 @@ package com.ludynia.recruitmentTask.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,6 +18,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUsernameNotFoundException(UserNotFoundException exception) {
         return new ErrorResponse(HttpStatus.NOT_FOUND.toString(), exception.getMessage());
+    }
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ErrorResponse handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotSupportedException exception) {
+        return new ErrorResponse(HttpStatus.NOT_ACCEPTABLE.toString(), exception.getMessage() );
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
