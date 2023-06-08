@@ -30,7 +30,8 @@ public class Repository {
     @JsonProperty("branches_url")
     @JsonDeserialize(using = BranchesUrlDeserializer.class)
     private List<Branch> branches;
-
+    @JsonProperty("fork")
+    private boolean fork;
 
 
 }

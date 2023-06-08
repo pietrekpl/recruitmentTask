@@ -9,10 +9,7 @@ import com.ludynia.recruitmentTask.model.Branch;
 import com.ludynia.recruitmentTask.model.Repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,18 +44,39 @@ public class GithubService {
         );
         Repository[] repositories = repositoryResponse.getBody();
 
-        List<RepositoryDto> responseList = new ArrayList<>();
-        for (Repository repository : repositories) {
-            RepositoryDto repositoryDto = new RepositoryDto();
-            repositoryDto.setRepositoryName(repository.getRepositoryName());
+        List<RepositoryDto> result = new ArrayList<>();
+        if (repositories != null) {
+            for (Repository repository : repositories) {
+                if (!repository.isFork()) {
+                    RepositoryDto repositoryDto = new RepositoryDto();
+                    repositoryDto.setRepositoryName(repository.getRepositoryName());
 
-            OwnerDto ownerDto = new OwnerDto();
-            ownerDto.setLogin(repository.getOwner().getLogin());
-            repositoryDto.setOwner(ownerDto);
+                    OwnerDto ownerDto = new OwnerDto();
+                    ownerDto.setLogin(repository.getOwner().getLogin());
+                    repositoryDto.setOwner(ownerDto);
 
-            List<BranchDto> branchDtos = new ArrayList<>();
-            // Fetch branches for the repository
-            List<Branch> branches = fetchBranches(repository.getRepositoryName(), username);
+                    List<BranchDto> branchDtos = fetchBranches(repository.getRepositoryName(), username);
+                    repositoryDto.setBranches(branchDtos);
+
+                    result.add(repositoryDto);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private List<BranchDto> fetchBranches(String repositoryName, String username) {
+        String apiUrl = github_api_url + "/repos/" + username + "/" + repositoryName + "/branches";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(AUTHORIZATION_HEADER,BEARER_PREFIX+apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Branch[]> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, Branch[].class);
+        Branch[] branches = response.getBody();
+
+        List<BranchDto> branchDtos = new ArrayList<>();
+        if (branches != null) {
             for (Branch branch : branches) {
                 BranchDto branchDto = new BranchDto();
                 branchDto.setName(branch.getName());
@@ -69,27 +87,8 @@ public class GithubService {
 
                 branchDtos.add(branchDto);
             }
-            repositoryDto.setBranches(branchDtos);
-
-            responseList.add(repositoryDto);
         }
 
-        return responseList;
-    }
-
-    private List<Branch> fetchBranches(String repositoryName, String username) {
-        String apiUrl = github_api_url + "/repos/" + username + "/" + repositoryName + "/branches";
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(AUTHORIZATION_HEADER,BEARER_PREFIX+apiKey);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<Branch[]> branchResponse = restTemplate.exchange(
-                apiUrl,
-                HttpMethod.GET,
-                entity,
-                Branch[].class
-        );
-        Branch[] branches = branchResponse.getBody();
-        assert branches != null;
-        return Arrays.asList(branches);
+        return branchDtos;
     }
 }

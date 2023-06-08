@@ -2,8 +2,6 @@ package com.ludynia.recruitmentTask.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.ludynia.recruitmentTask.model.Branch;
-import com.ludynia.recruitmentTask.model.Owner;
 import com.ludynia.recruitmentTask.util.BranchesUrlDeserializer;
 import lombok.Data;
 
