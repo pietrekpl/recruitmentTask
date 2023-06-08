@@ -1,12 +1,14 @@
 package com.ludynia.recruitmentTask.controller;
 
 import com.ludynia.recruitmentTask.dto.RepositoryDto;
-import com.ludynia.recruitmentTask.model.Repository;
+import com.ludynia.recruitmentTask.request.GithubRequest;
 import com.ludynia.recruitmentTask.service.GithubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -18,8 +20,9 @@ import java.util.List;
 public class GitHubController {
     private final GithubService githubService;
 
-    @GetMapping("/repositories/{username}")
-    public List<RepositoryDto> getAllRepositories(@PathVariable("username") String username) {
+    @PostMapping("/repositories")
+    public List<RepositoryDto> getAllRepositories(@RequestBody GithubRequest githubRequest) {
+        String username = githubRequest.getUsername();
         return githubService.getAllRepositories(username);
     }
 }

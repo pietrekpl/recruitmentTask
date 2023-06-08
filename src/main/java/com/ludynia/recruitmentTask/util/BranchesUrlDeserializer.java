@@ -4,12 +4,15 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ludynia.recruitmentTask.model.Branch;
+import com.ludynia.recruitmentTask.model.Commit;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -17,22 +20,28 @@ public class BranchesUrlDeserializer extends JsonDeserializer<List<Branch>>  {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<Branch> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        String branchesUrl = jsonParser.readValueAs(String.class);
-        List<Branch> branches = null;
+    public List<Branch> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode node = jsonParser.readValueAsTree();
 
-        try {
-            branches = fetchBranches(branchesUrl);
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<Branch> branches = new ArrayList<>();
+        if (node.isArray()) {
+            for (JsonNode branchNode : node) {
+                Branch branch = new Branch();
+                branch.setName(branchNode.get("name").asText());
+
+                JsonNode commitNode = branchNode.get("commit");
+                if (commitNode != null) {
+                    Commit commit = new Commit();
+                    commit.setSha(commitNode.get("sha").asText());
+                    branch.setCommit(commit);
+                }
+
+                branches.add(branch);
+            }
         }
-
         return branches;
     }
 
-    private List<Branch> fetchBranches(String branchesUrl) throws IOException {
-        URL url = new URL(branchesUrl);
-        Branch[] branches = objectMapper.readValue(url, Branch[].class);
-        return List.of(branches);
-    }
+
 }
