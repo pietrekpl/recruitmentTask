@@ -2,4 +2,4 @@
 github:
   api:
     url: https://api.github.com
-    api_key:
+    apikey:

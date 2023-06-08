@@ -8,6 +8,7 @@ import com.ludynia.recruitmentTask.dto.RepositoryDto;
 import com.ludynia.recruitmentTask.exception.UserNotFoundException;
 import com.ludynia.recruitmentTask.model.Branch;
 import com.ludynia.recruitmentTask.model.Repository;
+import com.ludynia.recruitmentTask.util.HeaderUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -17,7 +18,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -27,12 +27,9 @@ public class GithubApiService {
     @Value("${github.api.url}")
     private String github_api_url;
 
-    @Value("${github.api.api-key}")
-    private String apiKey;
-
     private final RestTemplate restTemplate;
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_PREFIX = "Bearer ";
+
+    private final HeaderUtils headerUtils;
 
     private final static List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
 
@@ -42,9 +39,7 @@ public class GithubApiService {
         }
 
         String apiUrl = github_api_url + "/users/" + username + "/repos";
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(AUTHORIZATION_HEADER, BEARER_PREFIX + apiKey);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpHeaders headers = headerUtils.getHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<Repository[]> repositoryResponse = restTemplate.exchange(
                 apiUrl,
@@ -87,12 +82,12 @@ public class GithubApiService {
 
     private List<BranchDto> fetchBranches(String repositoryName, String username) {
         String apiUrl = github_api_url + "/repos/" + username + "/" + repositoryName + "/branches";
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(AUTHORIZATION_HEADER, BEARER_PREFIX + apiKey);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpHeaders headers = headerUtils.getHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<Branch[]> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, Branch[].class);
+        ResponseEntity<Branch[]> response = restTemplate.exchange(apiUrl,
+                HttpMethod.GET,
+                entity,
+                Branch[].class);
         Branch[] branches = response.getBody();
 
         List<BranchDto> branchDtos = new ArrayList<>();
@@ -108,7 +103,6 @@ public class GithubApiService {
                 branchDtos.add(branchDto);
             }
         }
-
         return branchDtos;
     }
 }

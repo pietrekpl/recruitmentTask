@@ -1,19 +1,16 @@
 package com.ludynia.recruitmentTask;
 
-import com.ludynia.recruitmentTask.controller.GitHubController;
 import com.ludynia.recruitmentTask.dto.RepositoryDto;
 import com.ludynia.recruitmentTask.exception.UserNotFoundException;
 import com.ludynia.recruitmentTask.service.GithubApiService;
-import jakarta.validation.constraints.AssertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class GithubApiServiceTest {

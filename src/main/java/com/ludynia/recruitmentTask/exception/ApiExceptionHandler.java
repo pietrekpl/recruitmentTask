@@ -17,29 +17,34 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUsernameNotFoundException(UserNotFoundException exception) {
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse(HttpStatus.NOT_FOUND.toString(), exception.getMessage());
     }
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ErrorResponse handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotSupportedException exception) {
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse(HttpStatus.NOT_ACCEPTABLE.toString(), exception.getMessage() );
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(HttpClientErrorException.Forbidden.class)
     public ErrorResponse handleForbiddenException(HttpClientErrorException.Forbidden exception) {
+        log.error(exception.getMessage(), exception);
        return new ErrorResponse(HttpStatus.FORBIDDEN.toString(), exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
     public ErrorResponse handleForbiddenException(HttpClientErrorException.Unauthorized exception) {
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.toString(), exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ErrorResponse handleGeneralException(Exception exception) {
+        log.error(exception.getMessage(), exception);
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.getMessage());
     }
 
