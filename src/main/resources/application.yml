@@ -1,8 +1,5 @@
 
-
 github:
-  base:
-    url:
-
-    apikey:
-    media-type: application/json
+  api:
+    url: https://api.github.com
+    api_key: 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
