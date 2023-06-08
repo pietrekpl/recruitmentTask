@@ -22,7 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GithubService {
+public class GithubApiService {
 
     @Value("${github.api.url}")
     private String github_api_url;
@@ -40,7 +40,6 @@ public class GithubService {
         if (!isUsernameExists(username)) {
             throw new UserNotFoundException("User with username " + username + " does not exist on Github.");
         }
-
 
         String apiUrl = github_api_url + "/users/" + username + "/repos";
         HttpHeaders headers = new HttpHeaders();
@@ -73,11 +72,10 @@ public class GithubService {
                 }
             }
         }
-
         return result;
     }
 
-    private boolean isUsernameExists(String username) {
+    public boolean isUsernameExists(String username) {
         String apiUrl = github_api_url + "/users/" + username;
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);

@@ -2,7 +2,7 @@ package com.ludynia.recruitmentTask.controller;
 
 import com.ludynia.recruitmentTask.dto.RepositoryDto;
 import com.ludynia.recruitmentTask.request.GithubRequest;
-import com.ludynia.recruitmentTask.service.GithubService;
+import com.ludynia.recruitmentTask.service.GithubApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class GitHubController {
-    private final GithubService githubService;
+    private final GithubApiService githubApiService;
 
     @PostMapping(value = "/repositories", headers = "Accept=application/json")
     public List<RepositoryDto> getAllRepositories(@RequestBody GithubRequest githubRequest) {
         String username = githubRequest.getUsername();
-        return githubService.getAllRepositories(username);
+        return githubApiService.getAllRepositories(username);
     }
 }
 
