@@ -20,4 +20,4 @@ and paste it into application.yml to property api_key.
 * Choosing username which does not exist will cause getting exception with code 404
 * /////////////
 * You can also try version with docker
-* Links here : https://hub.docker.com/repository/docker/pludynia/recruitment_task/general
+* Links here : https://hub.docker.com/r/pludynia/recruitment_task
