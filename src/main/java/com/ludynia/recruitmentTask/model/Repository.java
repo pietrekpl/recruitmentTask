@@ -11,7 +11,6 @@ import java.util.List;
 
 @Data
 @Slf4j
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Repository {
     @JsonProperty("name")
@@ -23,6 +22,4 @@ public class Repository {
     private List<Branch> branches;
     @JsonProperty("fork")
     private boolean fork;
-
-
 }

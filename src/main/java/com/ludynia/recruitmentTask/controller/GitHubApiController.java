@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class GitHubApiController {
+
     private final GithubApiService githubApiService;
 
     @ResponseStatus(HttpStatus.OK)

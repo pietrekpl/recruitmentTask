@@ -13,7 +13,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUsernameNotFoundException(UserNotFoundException exception) {

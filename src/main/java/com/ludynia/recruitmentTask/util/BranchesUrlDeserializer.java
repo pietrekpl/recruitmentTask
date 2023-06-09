@@ -38,6 +38,4 @@ public class BranchesUrlDeserializer extends JsonDeserializer<List<Branch>> {
         }
         return branches;
     }
-
-
 }

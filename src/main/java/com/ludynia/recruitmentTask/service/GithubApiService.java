@@ -31,9 +31,8 @@ public class GithubApiService {
 
     private final HeaderUtils headerUtils;
 
-    private final static List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-
     public List<RepositoryDto> getAllRepositories(String username) {
+
         if (!isUsernameExists(username)) {
             throw new UserNotFoundException("User with username " + username + " does not exist on Github.");
         }
